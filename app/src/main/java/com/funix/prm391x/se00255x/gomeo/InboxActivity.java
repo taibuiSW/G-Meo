@@ -114,6 +114,8 @@ public class InboxActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btn_compose:
                 Intent intent = new Intent(this, ComposeActivity.class);
+                intent.putExtra(Key.EMAIL, mEmail);
+                intent.putExtra(Key.PASSWORD, mPassword);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

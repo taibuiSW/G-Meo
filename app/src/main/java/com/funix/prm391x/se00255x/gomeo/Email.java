@@ -21,7 +21,7 @@ class Email {
 
     Email(Message message) throws MessagingException {
         this.fromAddress = (InternetAddress) message.getFrom()[0];
-        this.subject = message.getSubject().isEmpty() ? "[No subject]" : message.getSubject();
+        this.subject = message.getSubject() == null ? "[No subject]" : message.getSubject();
         this.receivedDate = FORMAT.format(message.getReceivedDate());
         this.messageNumber = message.getMessageNumber();
     }
