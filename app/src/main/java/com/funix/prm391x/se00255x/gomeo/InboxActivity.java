@@ -3,6 +3,7 @@ package com.funix.prm391x.se00255x.gomeo;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -117,8 +119,37 @@ public class InboxActivity extends AppCompatActivity {
                 intent.putExtra(Key.EMAIL, mEmail);
                 intent.putExtra(Key.PASSWORD, mPassword);
                 startActivity(intent);
+                break;
+            case R.id.btn_refresh:
+                mMessages.clear();
+                mLoadedCount = 0;
+                new MailFetcher().execute();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setTitle("askdalsdasd")
+                .setMessage("What you wanna do?")
+                .setPositiveButton("Back to log in",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                            }
+                        })
+                .setNegativeButton("Exit",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.exit(0);
+                            }
+                        });
+        alertBuilder.create().show();
     }
 
     private static class ViewHolder {

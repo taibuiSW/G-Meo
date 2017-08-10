@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/btn_reply"
-        android:icon="@drawable/ic_reply_while_24dp"
+        android:icon="@drawable/ic_reply_24dp"
         android:title="@string/compose"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
 </menu>
