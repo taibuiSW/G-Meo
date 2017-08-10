@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Gờ Meo</string>
+    <string name="sign_in">Sign in Gmail</string>
+    <string name="log_in">Log in</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="compose">Write new message</string>
+    <string name="to">To</string>
+    <string name="subject">Subject</string>
+    <string name="send">Send</string>
+    <string name="compose_your_message">Compose your message</string>
+    <string name="from">From</string>
+    <string name="message">Message</string>
+</resources>
