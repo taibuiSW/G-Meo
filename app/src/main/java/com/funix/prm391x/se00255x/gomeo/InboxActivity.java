@@ -141,7 +141,7 @@ public class InboxActivity extends AppCompatActivity {
                                 dialog.cancel();
                             }
                         })
-                .setNegativeButton("Back to login screen",
+                .setNegativeButton("Logout",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
