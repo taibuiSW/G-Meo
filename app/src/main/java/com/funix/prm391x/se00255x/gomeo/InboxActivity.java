@@ -132,21 +132,20 @@ public class InboxActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setTitle("askdalsdasd")
-                .setMessage("What you wanna do?")
-                .setPositiveButton("Back to log in",
+                .setTitle("Confirm logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Stay",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                .setNegativeButton("Back to login screen",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(mContext, LoginActivity.class));
-                            }
-                        })
-                .setNegativeButton("Exit",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                System.exit(0);
                             }
                         });
         alertBuilder.create().show();

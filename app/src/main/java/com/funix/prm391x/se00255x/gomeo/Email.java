@@ -1,5 +1,7 @@
 package com.funix.prm391x.se00255x.gomeo;
 
+import android.support.annotation.Nullable;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -12,7 +14,7 @@ import javax.mail.internet.InternetAddress;
 
 class Email {
     private static final SimpleDateFormat FORMAT =
-            new SimpleDateFormat("EEE, MMM dd, yyyy h:mm a", Locale.US);
+            new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a", Locale.US);
 
     private InternetAddress fromAddress;
     private String subject;
@@ -26,6 +28,7 @@ class Email {
         this.messageNumber = message.getMessageNumber();
     }
 
+    @Nullable
     static String getText(Part p) throws
             MessagingException, IOException {
         if (p.isMimeType("text/*")) {

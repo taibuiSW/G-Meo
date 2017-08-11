@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="prm391x.se255x.gomeo.ReadActivity">
+    tools:context="com.funix.prm391x.se00255x.gomeo.ReadActivity">
 
     <TextView
         android:id="@+id/txv_subject"

@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Gờ Meo</string>
+    <string name="app_name">Green Mail</string>
     <string name="sign_in">Sign in Gmail</string>
-    <string name="log_in">Log in</string>
+    <string name="log_in">sign in to gmail</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="compose">Write new message</string>
@@ -12,4 +12,5 @@
     <string name="from">From</string>
     <string name="message">Message</string>
     <string name="refresh">Refresh inbox</string>
+    <string name="just_an_icon">just an icon</string>
 </resources>
