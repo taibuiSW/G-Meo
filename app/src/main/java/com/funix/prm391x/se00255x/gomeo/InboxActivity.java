@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sun.mail.util.MailConnectException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -46,7 +48,6 @@ public class InboxActivity extends AppCompatActivity {
     private CustomAdapter mCustomAdapter;
     private LayoutInflater mInflater;
     private Button mBtnMoreMessage;
-    private int mMessagesLeft;
     private int mLoadedCount = 0;
 
     @Override
@@ -158,7 +159,8 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private class MailFetcher extends AsyncTask<Void, Void, Boolean> {
-        String errorMessage;
+        String mErr;
+        private int mMessagesLeft;
 
         @Override
         protected void onPreExecute() {
@@ -205,18 +207,7 @@ public class InboxActivity extends AppCompatActivity {
                 store.close();
 
             } catch (MessagingException e) {
-                if (e instanceof AuthenticationFailedException) {
-                    String err = e.toString();
-                    if (err.contains("Invalid credentials")) {
-                        errorMessage = "The password you entered might be incorrect";
-                    } else if (err.contains("Please log in")) {
-                        errorMessage = "You have to allow less secure apps first";
-                    } else if (err.contains("Lookup failed")) {
-                        errorMessage = "The email you entered might be incorrect";
-                    } else {
-                        errorMessage = err.substring(42);
-                    }
-                }
+                setErrorMessage(e);
                 e.printStackTrace();
                 return false;
             }
@@ -229,12 +220,32 @@ public class InboxActivity extends AppCompatActivity {
             mCustomAdapter.notifyDataSetChanged();
             mBtnMoreMessage.setText(mMessagesLeft + " messages left");
             mProgressDialog.dismiss();
-            Toast.makeText(mContext, (isSuccessful ? "Done!" : errorMessage),
+            Toast.makeText(mContext, (isSuccessful ? "Done!" : mErr),
                     Toast.LENGTH_LONG).show();
             if (!isSuccessful) {
                 startActivity(new Intent(mContext, LoginActivity.class));
             }
             super.onPostExecute(isSuccessful);
+        }
+
+        private void setErrorMessage(Exception e) {
+            if (e instanceof AuthenticationFailedException) {
+                String err = e.toString();
+                if (err.contains("Invalid credentials")) {
+                    mErr = "The password you entered might be incorrect";
+                } else if (err.contains("Please log in")) {
+                    mErr = "You have to allow less secure apps first";
+                } else if (err.contains("Lookup failed")) {
+                    mErr = "The email you entered might be incorrect";
+                } else {
+                    mErr = err.substring(42);
+                }
+            } else if (e instanceof MailConnectException) {
+                mErr = "Couldn't connect to host. Your internet connection" +
+                        " might not be in the right state";
+            } else {
+                mErr = "Unknown Error";
+            }
         }
     }
 
