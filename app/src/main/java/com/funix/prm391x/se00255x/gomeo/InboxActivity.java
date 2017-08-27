@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -28,7 +26,6 @@ import android.widget.Toast;
 import com.sun.mail.util.MailConnectException;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import javax.mail.AuthenticationFailedException;
@@ -39,7 +36,7 @@ import javax.mail.Session;
 import javax.mail.Store;
 
 public class InboxActivity extends AppCompatActivity {
-    private Context mContext = this;
+    private Context mCtx = this;
     private ProgressDialog mProgressDialog;
     private String mEmail;
     private String mPassword;
@@ -55,7 +52,7 @@ public class InboxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
         setTitle("Inbox");
-        mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = LayoutInflater.from(mCtx);
 
         // get email and password from previous activity
         Intent intent = getIntent();
@@ -71,7 +68,7 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void setUpMailList() {
-        mCustomAdapter = new CustomAdapter(this, R.layout.mail_row, R.id.edt_subject, mMessages);
+        mCustomAdapter = new CustomAdapter();
         mMailList = (ListView) findViewById(R.id.mail_list);
         mMailList.setAdapter(mCustomAdapter);
     }
@@ -93,7 +90,7 @@ public class InboxActivity extends AppCompatActivity {
         mMailList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(mContext, ReadActivity.class);
+                Intent intent = new Intent(mCtx, ReadActivity.class);
                 Email email = mMessages.get(position);
                 intent.putExtra(Key.EMAIL, mEmail);
                 intent.putExtra(Key.PASSWORD, mPassword);
@@ -146,16 +143,10 @@ public class InboxActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(mContext, LoginActivity.class));
+                                startActivity(new Intent(mCtx, LoginActivity.class));
                             }
                         });
         alertBuilder.create().show();
-    }
-
-    private static class ViewHolder {
-        TextView txvSubject;
-        TextView txvFrom;
-        TextView txvReceivedDate;
     }
 
     private class MailFetcher extends AsyncTask<Void, Void, Boolean> {
@@ -165,7 +156,7 @@ public class InboxActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mProgressDialog = ProgressDialog.show(mContext,
+            mProgressDialog = ProgressDialog.show(mCtx,
                     "Please wait...", "Checking inbox folder", true, false);
         }
 
@@ -220,10 +211,10 @@ public class InboxActivity extends AppCompatActivity {
             mCustomAdapter.notifyDataSetChanged();
             mBtnMoreMessage.setText(mMessagesLeft + " messages left");
             mProgressDialog.dismiss();
-            Toast.makeText(mContext, (isSuccessful ? "Done!" : mErr),
+            Toast.makeText(mCtx, (isSuccessful ? "Done!" : mErr),
                     Toast.LENGTH_LONG).show();
             if (!isSuccessful) {
-                startActivity(new Intent(mContext, LoginActivity.class));
+                startActivity(new Intent(mCtx, LoginActivity.class));
             }
             super.onPostExecute(isSuccessful);
         }
@@ -249,10 +240,15 @@ public class InboxActivity extends AppCompatActivity {
         }
     }
 
+    private static class ViewHolder {
+        TextView mTxvSubject;
+        TextView mTxvFrom;
+        TextView mTxvReceivedDate;
+    }
+
     private class CustomAdapter extends ArrayAdapter<Email> {
-        CustomAdapter(@NonNull Context context, @LayoutRes int resource,
-                      @IdRes int textViewResourceId, @NonNull List<Email> objects) {
-            super(context, resource, textViewResourceId, objects);
+        CustomAdapter() {
+            super(mCtx, R.layout.mail_row, mMessages);
         }
 
         @NonNull
@@ -262,17 +258,17 @@ public class InboxActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.mail_row, parent, false);
                 holder = new ViewHolder();
-                holder.txvSubject = (TextView) convertView.findViewById(R.id.txv_subject_row);
-                holder.txvFrom = (TextView) convertView.findViewById(R.id.txv_from_row);
-                holder.txvReceivedDate = (TextView) convertView.findViewById(R.id.txv_received_date);
+                holder.mTxvSubject = (TextView) convertView.findViewById(R.id.txv_subject_row);
+                holder.mTxvFrom = (TextView) convertView.findViewById(R.id.txv_from_row);
+                holder.mTxvReceivedDate = (TextView) convertView.findViewById(R.id.txv_received_date);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             Email email = mMessages.get(position);
-            holder.txvSubject.setText(email.getSubject());
-            holder.txvFrom.setText(email.getFrom());
-            holder.txvReceivedDate.setText(email.getReceivedDate());
+            holder.mTxvSubject.setText(email.getSubject());
+            holder.mTxvFrom.setText(email.getFrom());
+            holder.mTxvReceivedDate.setText(email.getReceivedDate());
             return convertView;
         }
     }
